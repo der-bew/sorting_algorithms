@@ -17,18 +17,21 @@ void insertion_sort_list(listint_t **list)
 	while (swap_node != NULL)
 	{
 		next_swap = swap_node->next;
-		while (swap_node->prev != NULL && swap_node->prev->n > swap_node->n)
+		if (swap_node->prev != NULL && swap_node->prev->n > swap_node->n)
 		{
 			swap_node->prev->next = swap_node->next;
 			if (swap_node->next != NULL)
 				swap_node->next->prev = swap_node->prev;
-			swap_node->next = swap_node->prev;
-			swap_node->prev = swap_node->next->prev;
-			swap_node->next->prev = swap_node;
+			while (swap_node->prev != NULL && swap_node->prev->n > swap_node->n)
+			{
+				swap_node->next = swap_node->prev;
+				swap_node->prev = swap_node->prev->prev;
+			}
 			if (swap_node->prev == NULL)
 				*list = swap_node;
 			else
 				swap_node->prev->next = swap_node;
+			swap_node->next->prev = swap_node;
 			print_list(*list);
 		}
 		swap_node = next_swap;
